@@ -52,8 +52,12 @@ const TodoType = new GraphQLObjectType({
         //   isComplete: { type: new GraphQLNonNull(GraphQLBoolean) },
         },
         resolve: (parent, args) => {
+            const ids = todos.map(o => {
+                return o.id;
+              });
+              const max = Math.max(...ids);
           const todo = {
-            id: todos.length + 1,
+            id: max + 1,
             title: args.title,
             description: args.description,
             // isComplete: args.isComplete,
