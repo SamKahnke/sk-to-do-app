@@ -29,11 +29,11 @@ const TodoType = new GraphQLObjectType({
     }),
   });
 
-  const MessageType = new GraphQLObjectType({
-    name: 'Message',
-    description: 'A message returned by the server',
+  const IdType = new GraphQLObjectType({
+    name: 'Id',
+    description: 'An Id returned by the server',
     fields: () => ({
-      message: { type: new GraphQLNonNull(GraphQLString) },
+      id: { type: GraphQLInt },
     }),
   });
   
@@ -63,8 +63,8 @@ const TodoType = new GraphQLObjectType({
         },
       },
       deleteTodo: {
-        type: MessageType,
-        description: 'Adds a todo',
+        type: IdType,
+        description: 'Deletes a todo',
         args: {
           id: { type: new GraphQLNonNull(GraphQLInt) },
         },
@@ -73,7 +73,7 @@ const TodoType = new GraphQLObjectType({
                 return o.id === args.id;
            })
            if (index !== -1) todos.splice(index, 1);
-          return { message: `Todo item ${args.id} deleted.`};
+          return { id: args.id};
         },
       },
     }),
