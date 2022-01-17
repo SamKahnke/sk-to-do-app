@@ -15,7 +15,7 @@ const TodoType = new GraphQLObjectType({
       id: { type: new GraphQLNonNull(GraphQLInt) },
       title: { type: new GraphQLNonNull(GraphQLString) },
       description: { type: new GraphQLNonNull(GraphQLString) },
-      isComplete: { type: new GraphQLNonNull(GraphQLBoolean) },
+    //   isComplete: { type: new GraphQLNonNull(GraphQLBoolean) },
     }),
   });
   
@@ -30,6 +30,14 @@ const TodoType = new GraphQLObjectType({
       },
     }),
   });
+
+  const MessageType = new GraphQLObjectType({
+    name: 'Message',
+    description: 'A message returned by the server',
+    fields: () => ({
+      message: { type: new GraphQLNonNull(GraphQLString) },
+    }),
+  });
   
   const RootMutationType = new GraphQLObjectType({
     name: 'Mutation',
@@ -41,30 +49,44 @@ const TodoType = new GraphQLObjectType({
         args: {
           title: { type: new GraphQLNonNull(GraphQLString) },
           description: { type: new GraphQLNonNull(GraphQLString) },
-          isComplete: { type: new GraphQLNonNull(GraphQLBoolean) },
+        //   isComplete: { type: new GraphQLNonNull(GraphQLBoolean) },
         },
         resolve: (parent, args) => {
           const todo = {
             id: todos.length + 1,
             title: args.title,
             description: args.description,
-            isComplete: args.isComplete,
+            // isComplete: args.isComplete,
           };
           todos.push(todo);
           return todo;
         },
       },
-      updateTodo: {
-        type: TodoType,
-        description: 'Updates a todo',
+      deleteTodo: {
+        type: MessageType,
+        description: 'Adds a todo',
         args: {
           id: { type: new GraphQLNonNull(GraphQLInt) },
         },
         resolve: (parent, args) => {
-        todos.find(todo => todo.id === args.id).isComplete = true;
-          return todos.find(todo => todo.id === args.id);
+            const index = todos.findIndex(function(o){
+                return o.id === args.id;
+           })
+           if (index !== -1) todos.splice(index, 1);
+          return { message: `Todo item ${args.id} deleted.`};
         },
       },
+    //   updateTodo: {
+    //     type: TodoType,
+    //     description: 'Updates a todo',
+    //     args: {
+    //       id: { type: new GraphQLNonNull(GraphQLInt) },
+    //     },
+    //     resolve: (parent, args) => {
+    //     todos.find(todo => todo.id === args.id).isComplete = true;
+    //       return todos.find(todo => todo.id === args.id);
+    //     },
+    //   },
     }),
   });
   
@@ -78,25 +100,25 @@ const todos = [
       id: 1,
       title: 'Wash dishes',
       description: 'Get them clean.',
-      isComplete: false,
+    //   isComplete: false,
     },
     {
       id: 2,
       title: 'Do laundry',
       description: 'Remember to fold',
-      isComplete: false,
+    //   isComplete: false,
     },
     {
       id: 3,
       title: 'Clean bathroom',
       description: 'Get it clean.',
-      isComplete: false,
+    //   isComplete: false,
     },
     {
       id: 4,
       title: 'Comb hair',
       description: 'Get them straight.',
-      isComplete: false,
+    //   isComplete: false,
     },
   ];
   const resolvers = {
