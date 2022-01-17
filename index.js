@@ -6,6 +6,7 @@ const {
   GraphQLString,
   GraphQLBoolean,
 } = require('graphql/type/scalars');
+const ApolloServerPluginLandingPageGraphQLPlayground = require("apollo-server-core");
   
 const TodoType = new GraphQLObjectType({
     name: 'Todo',
@@ -104,7 +105,9 @@ const todos = [
     },
   };
 
-const server = new ApolloServer({ schema, resolvers });
+const server = new ApolloServer({ schema, resolvers,   plugins: [
+    ApolloServerPluginLandingPageGraphQLPlayground,
+  ], });
 
 server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
