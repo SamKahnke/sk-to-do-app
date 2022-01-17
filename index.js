@@ -4,7 +4,6 @@ const { GraphQLList, GraphQLNonNull } = require('graphql/type/definition');
 const {
   GraphQLInt,
   GraphQLString,
-  GraphQLBoolean,
 } = require('graphql/type/scalars');
 const { ApolloServerPluginLandingPageGraphQLPlayground } = require('apollo-server-core');
   
@@ -15,7 +14,6 @@ const TodoType = new GraphQLObjectType({
       id: { type: new GraphQLNonNull(GraphQLInt) },
       title: { type: new GraphQLNonNull(GraphQLString) },
       description: { type: new GraphQLNonNull(GraphQLString) },
-    //   isComplete: { type: new GraphQLNonNull(GraphQLBoolean) },
     }),
   });
   
@@ -49,7 +47,6 @@ const TodoType = new GraphQLObjectType({
         args: {
           title: { type: new GraphQLNonNull(GraphQLString) },
           description: { type: new GraphQLNonNull(GraphQLString) },
-        //   isComplete: { type: new GraphQLNonNull(GraphQLBoolean) },
         },
         resolve: (parent, args) => {
             const ids = todos.map(o => {
@@ -60,7 +57,6 @@ const TodoType = new GraphQLObjectType({
             id: max + 1,
             title: args.title,
             description: args.description,
-            // isComplete: args.isComplete,
           };
           todos.push(todo);
           return todo;
@@ -80,17 +76,6 @@ const TodoType = new GraphQLObjectType({
           return { message: `Todo item ${args.id} deleted.`};
         },
       },
-    //   updateTodo: {
-    //     type: TodoType,
-    //     description: 'Updates a todo',
-    //     args: {
-    //       id: { type: new GraphQLNonNull(GraphQLInt) },
-    //     },
-    //     resolve: (parent, args) => {
-    //     todos.find(todo => todo.id === args.id).isComplete = true;
-    //       return todos.find(todo => todo.id === args.id);
-    //     },
-    //   },
     }),
   });
   
@@ -104,25 +89,21 @@ const todos = [
       id: 1,
       title: 'Wash dishes',
       description: 'Get them clean.',
-    //   isComplete: false,
     },
     {
       id: 2,
       title: 'Do laundry',
       description: 'Remember to fold',
-    //   isComplete: false,
     },
     {
       id: 3,
       title: 'Clean bathroom',
       description: 'Get it clean.',
-    //   isComplete: false,
     },
     {
       id: 4,
       title: 'Comb hair',
       description: 'Get them straight.',
-    //   isComplete: false,
     },
   ];
   const resolvers = {
